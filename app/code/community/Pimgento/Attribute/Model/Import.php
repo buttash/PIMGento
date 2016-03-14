@@ -219,7 +219,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
      */
     public function updateFamily($task)
     {
-        $adapter  = $this->getAdapter();
+        $adapter = $this->getAdapter();
 
         $attributes = $this->_getAttributes();
 
@@ -228,16 +228,17 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
         $query = $adapter->query($import);
 
         while (($row = $query->fetch())) {
-
-            if (in_array($row['entity_id'], $attributes)) {
-                $this->_updateFamily($row);
+            try {
+                if (in_array($row['entity_id'], $attributes)) {
+                    $this->_updateFamily($row);
+                }
+            } catch (Exception $e) {
+                echo 'Caught exception: ', $e->getMessage(), "\n";
             }
 
+            return true;
         }
-
-        return true;
     }
-
     /**
      * Drop table (Step 8)
      *
