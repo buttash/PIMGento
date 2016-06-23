@@ -10,7 +10,7 @@ class Mage_Shell_DataflowExport extends Mage_Shell_Abstract
         $type = $this->getArg('type');
         if (!$this->getArg('type')) {
             echo "Usage: php -f pimgentoImport.php -type [option]\r\n";
-            echo "Where: option is 'product', 'image', 'variant', or 'option'\r\n";
+            echo "Where: option is 'product', 'image', 'variant', 'option', 'family', 'category'\r\n";
             return;
         }
         pimgentoImport($type);
