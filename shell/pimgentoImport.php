@@ -1,4 +1,9 @@
 <?php
+/**
+ * A shell script to run the Pimgento imports.  Largely lifted from code in Pimgento/Core/Model/Cron.php
+ * Martin Hopkins - 23/6/2016
+ *
+ */
 //
 // The following finds /shell/abstract.php.  The depth depends on where the script is.  As I am using modman
 // I need to go up four levels.  Without modman, the script can be put in the /shell folder in which case
@@ -25,12 +30,9 @@ $shell = new Mage_Shell_DataflowExport();
 $shell->run();
 
 /**
- * Function to perform PIMGento import tasks
- * User: Martin Hopkins
- * Date: 23/06/2016
- * Time: 08:30
- * @param $type - file type to load, one of product, variant, option, image
- * @param $command- import task to perform
+ * Function to perform Pimgento import tasks
+ *
+ * @param $type - file type to load, one of product, variant, option, image etc
  */
 function pimgentoImport($type)
 {
