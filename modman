@@ -5,3 +5,4 @@ app/etc/modules/Pimgento_All.xml app/etc/modules/Pimgento_All.xml
 app/locale/en_US/Pimgento_Core.csv app/locale/en_US/Pimgento_Core.csv
 app/locale/fr_FR/Pimgento_Core.csv app/locale/fr_FR/Pimgento_Core.csv
 skin/adminhtml/default/default/pimgento skin/adminhtml/default/default/pimgento
+shell/pimgentoImport.php shell/pimgentoImport.php
