@@ -1,4 +1,8 @@
 <?php
+//
+// The following finds /shell/abstract.php.  The depth depends on where the script is.  As I am using modman
+// I need to go up four levels.  Without modman, the script can be put in the /shell folder in which case
+// require_once("abstract.php") should work.
 require_once (
     dirname(dirname(dirname(dirname(realpath(__FILE__))))) . DIRECTORY_SEPARATOR . 'shell' . DIRECTORY_SEPARATOR . 'abstract.php'
 );
