@@ -40,7 +40,7 @@ function pimgentoImport($type)
         $file = Mage::getStoreConfig('pimdata/' . $type . '/cron_file');
 
         if (!$file) {
-            echo 'No file configured in PIMGento cron option for ' . $type . ' - exiting';
+            echo 'No file configured in Pimgento cron option for ' . $type . ' - exiting\r\n';
             return;
         }
 
@@ -62,6 +62,7 @@ function pimgentoImport($type)
 
             $data = $task->getTask();
             if ($data['type'] == 'file' && !is_file($task->getFile())) {
+                echo 'File ' . $task->getFile() . ' does not exist - exiting\r\n';
                 return;
             }
 
