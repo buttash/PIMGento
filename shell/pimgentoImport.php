@@ -22,7 +22,7 @@ class Mage_Shell_DataflowExport extends Mage_Shell_Abstract
             return;
         }
         if (!in_array ($type, array('product','variant','option','family','image', 'category'))) {
-            echo $type . ' is invalid' . newline();
+            echo 'Type "' . $type . '" is invalid' . newline();
             usage();
             return;
         }
@@ -64,7 +64,7 @@ function pimgentoImport($type, $file = null)
         // Start the task
         $model = Mage::getSingleton('pimgento_core/task');
         $task = $model->load($command);
-        if (isset($file)) {
+        if (!empty($file)) {
             $task->setFile(null);
             $task->setFile($helper->getCronDir() . $file);
 
