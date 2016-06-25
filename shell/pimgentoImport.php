@@ -18,11 +18,16 @@ class Mage_Shell_DataflowExport extends Mage_Shell_Abstract
     public function run() {
         $type = $this->getArg('type');
         if (!$this->getArg('type')) {
-            echo "Usage: php -f pimgentoImport.php -type [option]\r\n";
-            echo "Where: option is 'product', 'image', 'variant', 'option', 'family', 'category'\r\n";
+            usage();
             return;
         }
-        pimgentoImport($type);
+        if (!in_array ($type, array('product','variant','option','family','image', 'category'))) {
+            echo $type . ' is invalid' . newline();
+            usage();
+            return;
+        }
+        $file = $this->getArg('file');
+        pimgentoImport($type, $file);
     }
 }
 
@@ -33,53 +38,65 @@ $shell->run();
  * Function to perform Pimgento import tasks
  *
  * @param $type - file type to load, one of product, variant, option, image etc
+ * @param $file
  */
-function pimgentoImport($type)
+function pimgentoImport($type, $file = null)
 {
-        $command = 'pimgento_' . $type;
+    $command = 'pimgento_' . $type;
+    if (strcmp($type, 'image') !== 0 && empty($file)) {
         $file = Mage::getStoreConfig('pimdata/' . $type . '/cron_file');
 
         if (!$file) {
-            echo 'No file configured in Pimgento cron option for ' . $type . ' - exiting\r\n';
+            echo 'No file configured in Pimgento cron option for ' . $type . ' - exiting' . newline();
             return;
         }
+    }
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+    set_time_limit(0);
 
-        set_time_limit(0);
+    umask(0);
 
-        umask(0);
+    $helper = Mage::helper('pimgento_core');
 
-        $helper = Mage::helper('pimgento_core');
-
-        try {
-            // Start the task
-            $model = Mage::getSingleton('pimgento_core/task');
-            $task = $model->load($command);
+    try {
+        // Start the task
+        $model = Mage::getSingleton('pimgento_core/task');
+        $task = $model->load($command);
+        if (isset($file)) {
             $task->setFile(null);
             $task->setFile($helper->getCronDir() . $file);
 
-            $data = $task->getTask();
-            if ($data['type'] == 'file' && !is_file($task->getFile())) {
-                echo 'File ' . $task->getFile() . ' does not exist - exiting\r\n';
+            if (!is_file($task->getFile())) {
+                echo 'File ' . $task->getFile() . ' does not exist - exiting' . newline();
                 return;
             }
-
-            $task->setNoReindex(false);
-            echo 'Executing task to import ' . $command . "\r\n";
-            echo "\r\n";
-            while (!$task->taskIsOver()) {
-                $task->execute();
-                echo $task->getStepComment() . "\r\n";
-                echo $task->getMessage() . "\r\n";
-                $task->nextStep();
-            }
-            echo "\r\n";
-
-            echo "Task " . $command . " complete\r\n";
-        } catch (Exception $e) {
-            echo $e->getMessage() . (PHP_SAPI === 'cli' ? "\n" : '<br/>');
+            echo 'Processing File ' . $task->getFile() . newline();
         }
+        $task->setNoReindex(false);
+        echo 'Executing task to import ' . $command . newline();
+        echo newline();
+        while (!$task->taskIsOver()) {
+            $task->execute();
+            echo $task->getStepComment() . newline();
+            echo $task->getMessage() . newline();
+            $task->nextStep();
+        }
+        echo newline();
 
+        echo "Task " . $command . " complete" . newline();
+    } catch (Exception $e) {
+        echo $e->getMessage() . newline();
+    }
+}
+
+function newline() {
+    return (PHP_SAPI === 'cli' ? "\r\n" : '<br/>');
+}
+
+function usage() {
+    echo "Usage: php -f pimgentoImport.php -type type [-file filename]\r\n";
+    echo "Where: type is 'product', 'image', 'variant', 'option', 'family', 'category'\r\n";
+    echo "       file is the file to load '\r\n";
 }
