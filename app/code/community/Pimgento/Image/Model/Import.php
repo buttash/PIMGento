@@ -174,7 +174,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $key++;
             }
 
-            $data['gallery'] = join(',', $gallery);
+            $data['gallery'] = join('%%', $gallery);
 
             $adapter->insert($this->getTable(), $data);
         }
@@ -234,7 +234,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         while (($row = $query->fetch())) {
 
-            $imageData = explode(',', $row['gallery']);
+            $imageData = explode('%%', $row['gallery']);
 
             $table = $resource->getTable('catalog/product_attribute_media_gallery');
 
@@ -243,9 +243,13 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             foreach ($imageData as $key => $imageItem) {
 
                 if (Mage::getStoreConfig('pimdata/image/set_labels')) {
-                    $imageInfo = explode('||', $imageItem);
-                    $imageFile = $imageInfo[1];
-                    $imageLabel = $imageInfo[0];
+                    try {
+                        $imageInfo = explode('||', $imageItem);
+                        $imageFile = $imageInfo[1];
+                        $imageLabel = $imageInfo[0];
+                    } catch (Exception $e) {
+                        echo 'OOps\n';
+                    }
                 } else {
                     $imageFile = $imageItem;
                     $imageLabel = null;
