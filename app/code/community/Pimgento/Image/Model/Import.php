@@ -243,13 +243,9 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             foreach ($imageData as $key => $imageItem) {
 
                 if (Mage::getStoreConfig('pimdata/image/set_labels')) {
-                    try {
-                        $imageInfo = explode('||', $imageItem);
-                        $imageFile = $imageInfo[1];
-                        $imageLabel = $imageInfo[0];
-                    } catch (Exception $e) {
-                        echo 'OOps\n';
-                    }
+                    $imageInfo = explode('||', $imageItem);
+                    $imageFile = $imageInfo[1];
+                    $imageLabel = $imageInfo[0];
                 } else {
                     $imageFile = $imageItem;
                     $imageLabel = null;
