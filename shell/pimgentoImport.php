@@ -21,7 +21,7 @@ class Mage_Shell_DataflowExport extends Mage_Shell_Abstract
             usage();
             return;
         }
-        if (!in_array ($type, array('product','variant','option','family','image', 'category'))) {
+        if (!in_array ($type, array('product','variant','option','family','image', 'category', 'attribute'))) {
             echo 'Type "' . $type . '" is invalid' . newline();
             usage();
             return;
