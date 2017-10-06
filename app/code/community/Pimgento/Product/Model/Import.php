@@ -976,14 +976,22 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $priceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
+<<<<<<< acc0aa11c67a336b809cd66221217f1fd876b653
                 ->where('entity_type_id = ?', $this->getProductEntityTypeId())
+=======
+                ->where('entity_type_id = ?', $this->getDefaultAttributSetId())
+>>>>>>> Products: Removed hardcoded entity type id
                 ->where('attribute_code = ?', 'price')
                 ->limit(1));
 
         $specialPriceId = $adapter->fetchOne(
             $adapter->select()
                 ->from($resource->getTable('eav/attribute'), array('attribute_id'))
+<<<<<<< acc0aa11c67a336b809cd66221217f1fd876b653
                 ->where('entity_type_id = ?', $this->getProductEntityTypeId())
+=======
+                ->where('entity_type_id = ?', $this->getDefaultAttributSetId())
+>>>>>>> Products: Removed hardcoded entity type id
                 ->where('attribute_code = ?', 'special_price')
                 ->limit(1));
 
@@ -1369,8 +1377,14 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 ->group('p.entity_id')
         );
 
+<<<<<<< acc0aa11c67a336b809cd66221217f1fd876b653
         foreach ($gallery as $entityId => $data) {
             $images = array_values(array_unique(explode('|', $data['image'])));
+=======
+        $assetSqlColumns = implode(',', array_map(function($asset) {
+            return '`p`.`' . $asset . '`';
+        }, $assetAkeneoAttributeCodes));
+>>>>>>> Products: Removed hardcoded entity type id
 
             $galleryTable = $resource->getTable('catalog/product_attribute_media_gallery');
             $galleryValueTable = $resource->getTable('catalog/product_attribute_media_gallery_value');
