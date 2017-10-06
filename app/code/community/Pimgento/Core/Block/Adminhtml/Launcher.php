@@ -80,19 +80,14 @@ class Pimgento_Core_Block_Adminhtml_Launcher extends Mage_Uploader_Block_Multipl
         return $this->getRequest()->getParam('type');
     }
 
-    public function getExecuteButtonHtml()
-    {
-        return $this->getChildHtml('execute_button');
-    }
-
     /**
      * Get html code of button
      *
      * @return string
      */
-    public function getUploadButtonHtml()
+    public function getExecuteButtonHtml()
     {
-        return $this->getChild('upload_button')->toHtml();
+        return $this->getChildHtml('execute_button');
     }
 
     /**
